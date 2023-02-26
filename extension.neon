@@ -1,0 +1,5 @@
+services:
+    -
+        class: KphpPHPStan\Types\NotNullFunctionDynamicReturnTypeExtension
+        tags:
+          - phpstan.broker.dynamicFunctionReturnTypeExtension
