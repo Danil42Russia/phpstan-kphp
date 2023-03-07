@@ -11,3 +11,5 @@
 ### Поддерживаемые функции
 
 - `not_null`
+- `not_false`
+- `instance_cast`

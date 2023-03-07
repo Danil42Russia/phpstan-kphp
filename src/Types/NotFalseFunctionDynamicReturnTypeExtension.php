@@ -8,14 +8,16 @@ use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\BooleanType;
 use PHPStan\Type\DynamicFunctionReturnTypeExtension;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\UnionType;
 
-class NotNullFunctionDynamicReturnTypeExtension implements DynamicFunctionReturnTypeExtension {
+class NotFalseFunctionDynamicReturnTypeExtension implements DynamicFunctionReturnTypeExtension {
   public function isFunctionSupported(FunctionReflection $functionReflection): bool {
-    return $functionReflection->getName() === "not_null";
+    return $functionReflection->getName() === "not_false";
   }
 
   public function getTypeFromFunctionCall(FunctionReflection $functionReflection, FuncCall $functionCall, Scope $scope): ?Type {
@@ -25,7 +27,7 @@ class NotNullFunctionDynamicReturnTypeExtension implements DynamicFunctionReturn
     }
 
     $type = $scope->getType($args[0]->value);
-    if ($type->isNull()->yes()) {
+    if ($type->isFalse()->yes()) {
       throw new ShouldNotHappenException();
     }
 
@@ -33,6 +35,27 @@ class NotNullFunctionDynamicReturnTypeExtension implements DynamicFunctionReturn
       return new MixedType();
     }
 
-    return TypeCombinator::removeNull($type);
+    return self::removeFalse($type);
+  }
+
+  static function removeFalse(Type $type): Type {
+    if ($type instanceof BooleanType) {
+      return $type;
+    }
+
+    if (!($type instanceof UnionType)) {
+      throw new ShouldNotHappenException();
+    }
+
+    $types = [];
+    foreach ($type->getTypes() as $innerType) {
+      if ($innerType->isFalse()->yes()) {
+        continue;
+      }
+
+      $types[] = $innerType;
+    }
+
+    return TypeCombinator::union(...$types);
   }
 }

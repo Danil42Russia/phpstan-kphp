@@ -4,7 +4,7 @@
   "require": {
     "php": "^7.4 || ^8.0",
     "phpstan/phpstan": "^1.9",
-    "vkcom/kphp-polyfills": "^1.0"
+    "vkcom/kphp-polyfills": "dev-master"
   },
   "require-dev": {
     "phpstan/phpstan-phpunit": "^1.3",

@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @template T
+ * @param T|null $any_value
+ * @return T
+ */
+function not_null($any_value) {}
+
+/**
+ * @template T
+ * @param T|false $any_value
+ * @return T
+ */
+function not_false($any_value) {}
+
+/**
+ * @template T
+ * @param class-string<T> $class_name
+ * @return T|null
+ */
+function instance_cast(?object $instance, string $class_name) {}

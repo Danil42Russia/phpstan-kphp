@@ -1,5 +1,13 @@
+parameters:
+    stubFiles:
+        - stubs/Core.stub
+
 services:
     -
         class: KphpPHPStan\Types\NotNullFunctionDynamicReturnTypeExtension
         tags:
-          - phpstan.broker.dynamicFunctionReturnTypeExtension
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+    -
+        class: KphpPHPStan\Types\NotFalseFunctionDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension

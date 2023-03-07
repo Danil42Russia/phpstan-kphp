@@ -4,44 +4,45 @@ declare(strict_types = 1);
 
 use function PHPStan\Testing\assertType;
 
-/** @var string|null $string */
-$string = null;
-if ($string === null) {
-  $string = "";
+{
+  /** @var string|null $type */
+  $type = null;
+  $type = not_null($type);
+
+  assertType("string", $type);
 }
 
-$string = not_null($string);
+{
+  /** @var int|null $type */
+  $type = null;
+  $type = not_null($type);
 
-assertType("string", $string);
-
-/** @var int|null $int */
-$int = null;
-if ($int === null) {
-  $int = 1;
+  assertType("int", $type);
 }
 
-$int = not_null($int);
+{
+  /** @var mixed $type */
+  $type = null;
+  $type = not_null($type);
 
-assertType("int", $int);
-
-/** @var mixed $mixed */
-$mixed = null;
-if ($mixed === null) {
-  $mixed = "";
+  assertType("mixed", $type);
 }
 
-$mixed = not_null($mixed);
+{
+  class Clazz {
+  }
 
-assertType("mixed", $mixed);
+  /** @var Clazz|null $type */
+  $type = null;
+  $type = not_null($type);
 
-class Clazz {}
-
-/** @var Clazz|null $clazz */
-$clazz = null;
-if ($clazz === null) {
-  $clazz = new Clazz();
+  assertType(Clazz::class, $type);
 }
 
-$clazz = not_null($clazz);
+{
+  /** @var int|false|null|string $type */
+  $type = null;
+  $type = not_null($type);
 
-assertType(Clazz::class, $clazz);
+  assertType("int|string|false", $type);
+}
